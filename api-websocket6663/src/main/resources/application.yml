@@ -1,0 +1,35 @@
+server:
+  port: 6663
+
+spring:
+  application:
+    name: api-websocket
+  redis:
+    pool:
+      max-wait: -1
+      max-idle: 8
+      max-active: 8
+      min-idle: 0
+    host: 127.0.0.1
+    port: 6379
+  cloud:
+    stream:
+      binders:
+      defaultRabbit:
+        type:rabbit
+      bindings:
+        websocketMessageIn:
+          destination: websocketMessage
+          binder: defaultRabbit
+        websocketMessageOut:
+          destination: websocketMessage
+          binder: defaultRabbit
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      #defaultZone: http://localhost:7001/eureka
+       defaultZone: http://localhost:7001/eureka/,http://localhost:7002/eureka/
+  instance:
+    instance-id: api-websocket6663
+    prefer-ip-address: true     #访问路径可以显示IP地址

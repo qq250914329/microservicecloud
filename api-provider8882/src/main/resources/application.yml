@@ -1,0 +1,104 @@
+logging:
+  config: classpath:logback.xml
+  path: d:/logs
+server:
+  ip: 127.0.0.0
+  port: 8882
+  session-timeout: 60
+
+mybatis:
+     mapperLocations: classpath:mybatis/*.xml
+     typeAliasesPackage: com.fei.springboot.dao
+     mapperScanPackage: com.fei.springboot.dao
+     configLocation: classpath:/mybatis-config.xml
+
+spring:
+    redis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1
+        min-idle: 0
+      host: 127.0.0.1
+      port: 6379
+    application:
+      name: api-provider
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url: 
+      #defaultZone: http://localhost:7001/eureka
+       defaultZone: http://localhost:7001/eureka/,http://localhost:7002/eureka/
+  instance:
+    instance-id: api-provider8882
+    prefer-ip-address: true     #访问路径可以显示IP地址     
+ 
+info: 
+  app.name: atguigu-microservicecloud
+  company.name: www.atguigu.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$
+
+mysql:
+    datasource:
+        readSize: 2  #读库个数
+        type: com.alibaba.druid.pool.DruidDataSource
+        mapperLocations: classpath:mybatis/*.xml
+        configLocation: classpath:/mybatis-config.xml
+        write:
+           url: jdbc:mysql://127.0.0.1:3306/mall01?useUnicode=true&amp;characterEncoding=utf-8
+           username: root
+           password: root
+           driver-class-name: com.mysql.jdbc.Driver
+           minIdle: 5
+           maxActive: 100
+           initialSize: 10
+           maxWait: 60000
+           timeBetweenEvictionRunsMillis: 60000
+           minEvictableIdleTimeMillis: 300000
+           validationQuery: select 'x'
+           testWhileIdle: true
+           testOnBorrow: false
+           testOnReturn: false
+           poolPreparedStatements: true
+           maxPoolPreparedStatementPerConnectionSize: 50
+           removeAbandoned: true
+           filters: stat
+        read01:
+           url: jdbc:mysql://127.0.0.1:3306/mall01?useUnicode=true&amp;characterEncoding=utf-8
+           username: root
+           password: root
+           driver-class-name: com.mysql.jdbc.Driver
+           minIdle: 5
+           maxActive: 100
+           initialSize: 10
+           maxWait: 60000
+           timeBetweenEvictionRunsMillis: 60000
+           minEvictableIdleTimeMillis: 300000
+           validationQuery: select 'x'
+           testWhileIdle: true
+           testOnBorrow: false
+           testOnReturn: false
+           poolPreparedStatements: true
+           maxPoolPreparedStatementPerConnectionSize: 50
+           removeAbandoned: true
+           filters: stat
+        read02:
+           url: jdbc:mysql://127.0.0.1:3306/mall01?useUnicode=true&amp;characterEncoding=utf-8
+           username: root
+           password: root
+           driver-class-name: com.mysql.jdbc.Driver
+           minIdle: 5
+           maxActive: 100
+           initialSize: 10
+           maxWait: 60000
+           timeBetweenEvictionRunsMillis: 60000
+           minEvictableIdleTimeMillis: 300000
+           validationQuery: select 'x'
+           testWhileIdle: true
+           testOnBorrow: false
+           testOnReturn: false
+           poolPreparedStatements: true
+           maxPoolPreparedStatementPerConnectionSize: 50
+           removeAbandoned: true
+           filters: stat

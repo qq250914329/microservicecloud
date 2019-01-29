@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-consumer8100" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-gateway9527" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-provider8881" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-provider8882" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-provider8883" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-websocket6661" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-websocket6662" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-websocket6663" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/microservicecloud-eureka-7001" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/microservicecloud-eureka-7002" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/microservicecloud-eureka-7003" charset="UTF-8" />
+  </component>
+</project>
