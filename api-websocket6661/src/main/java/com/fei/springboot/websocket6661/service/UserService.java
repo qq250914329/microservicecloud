@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -40,6 +42,15 @@ public class UserService {
 		}
 		return values;
 	}
+	public String getUserById(String sessionId){
+		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(WSUSERS);
+		for(String val:boundHashOperations.values()){
+			if(sessionId.equals(val)){
+				return val;
+			}
+		}
+		return null;
+	}
 
 
 	//根据用户监听的queue进行绑定，同一queue的用户在一个内存栈中（BoundHashOperations）
@@ -64,16 +75,29 @@ public class UserService {
 	//根据用户监听的queue进行绑定，同一queue的用户在一个内存栈中（BoundSetOperations）
 	public void addSetUserQueue(String sessionId,String queue){
 		BoundSetOperations<String, String> boundSetOperations = redisTemplate.boundSetOps(queue);
-		boundSetOperations.add(sessionId).toString();
+		boundSetOperations.add(sessionId);
 	}
+
 	public void delSetUserQueue(String sessionId,String queue){
 		BoundSetOperations<String, String> boundSetOperations = redisTemplate.boundSetOps(queue);
 		boundSetOperations.remove(sessionId);
 	}
-	public Object setRandomQueue(String queue){
+
+	public String setRandomQueue(String sessionId,String queue){
 		BoundSetOperations<String, String> boundSetOperations = redisTemplate.boundSetOps(queue);
 		//随机获取一个值，返回获取的值并在内存中删除该数据
-		return boundSetOperations.pop();
+		Object getId = boundSetOperations.pop();
+		String rtnId = "";
+		if(null !=getId){
+			if(sessionId.equals(getId.toString())){
+				addSetUserQueue(getId.toString(),queue);
+			}else{
+				rtnId = getId.toString();
+				boundSetOperations.remove(getId);
+				return rtnId;
+			}
+		}
+		return null;
 	}
 
 }

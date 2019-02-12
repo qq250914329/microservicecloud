@@ -1,5 +1,7 @@
 package com.fei.springboot.websocket6661.web.rest;
 
+import com.alibaba.fastjson.JSON;
+import com.fei.springboot.websocket6661.config.ExecutorThreadPool;
 import com.fei.springboot.websocket6661.config.websocket.Constance;
 import com.fei.springboot.websocket6661.service.UserService;
 import com.fei.springboot.websocket6661.web.dto.Message;
@@ -8,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class PointMessageResource3 {
@@ -21,18 +20,41 @@ public class PointMessageResource3 {
 	@Autowired
 	private UserService userService;
 
+	private ExecutorThreadPool executorThreadPool = ExecutorThreadPool.getInstance();
+
+	public void messageHandler(String queue, String sessionId, Message message, String fromUser, UserService userService,AmqpTemplate amqpTemplate){
+		switch(message.getMsgType()){
+			case "0":	//匹配玩家
+				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);
+				break;
+			case "1":	//玩家准备开始
+				System.out.println("用户通讯消息："+message.toString());
+				amqpTemplate.convertAndSend("", queue+message.getTo(), JSON.toJSONString(message));
+				break;
+			case "2":
+				System.out.println("222");
+				break;
+			case "3":
+				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);
+				break;
+			case "4":
+				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);
+				break;
+			default:
+
+				break;
+		}
+	}
+
 	@MessageMapping("/sendToUser")
 	public void point2point3(Message message, SimpMessageHeaderAccessor headerAccessor) {
 		String userId = userService.getSessionId(message.getTo());
-		System.out.println(Constance.queue_pre+userId);
 		amqpTemplate.convertAndSend("", Constance.queue_pre+userId, message.getMessage());
 	}
 
 	@MessageMapping("/gobangToUser")
 	public void gobang(Message message, SimpMessageHeaderAccessor headerAccessor) {
-		String queue = Constance.gobang;
-		String userId =	findOnePlayer(message.getFrom(),queue);
-		amqpTemplate.convertAndSend("", Constance.gobang+userId, message.getMessage());
+		messageHandler(Constance.gobang,headerAccessor.getSessionId(),message,headerAccessor.getUser().getName(),userService,amqpTemplate);
 	}
 
 	@MessageMapping("/pointHarf")
@@ -81,12 +103,5 @@ public class PointMessageResource3 {
 	public void handleSubscribe(String msg) {
 		System.out.println("客户端发来消息：" + msg);
 		// TODO: 处理收到的消息
-	}
-
-	public String  findOnePlayer(String from,String queue){
-		queue = queue.substring(0,queue.indexOf("-"));
-		Map<String,String> userSession = userService.listSessionIdsQueue(queue);
-		userService.randomMemberQueue(queue);
-		return null;
 	}
 }

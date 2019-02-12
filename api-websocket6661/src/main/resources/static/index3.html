@@ -27,12 +27,12 @@
     var url = "ws://127.0.0.1:6661/socketserver";
     var ws = new WebSocket(url);
     var stompClient = Stomp.over(ws);
-    var openid = "admin11";
+    var openid = "admin3";
     stompClient.connect({login:openid,passcode:openid},
         function(frame) {
             console.log('开始进行连接Connected: ' + frame);
             stompClient.subscribe('/user/queue/gobang', function(respnose){ //2 订阅广播
-                console.log(respnose.body);//3 接收消息
+                console.log('msg:'+respnose.body);//3 接收消息
             });
         }
     );
@@ -41,7 +41,7 @@
         var name = $("#name").val();
         var mname = $("#mname").val();
         var content = $("#content").val();
-        stompClient.send("/sendToUser", {}, JSON.stringify({'from': openid,'to':37,'message':content}));
+        stompClient.send("/gobangToUser", {}, JSON.stringify({'gameFlag':'gobang','msgType':'0','from': openid,'to':37,'message':content}));
         //stompClient.send("/sendToUser", {}, JSON.stringify({'from': 'admin','to':37,'message':content}));
     }
 </script>

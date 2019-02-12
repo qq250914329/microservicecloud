@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>点对点</title>
+    <meta charset="utf-8"></meta>
+    <title>websocket集群</title>
 </head>
-<body onload="disconnect()">
-<noscript><h2 style="color: #ff0000">貌似你的浏览器不支持websocket</h2></noscript>
+<body>
 <div>
     <div>
         <label>输入你的名字</label><input type="text" id="name" />
@@ -20,82 +19,61 @@
         <p id="response"></p>
     </div>
 </div>
+</body>
 <script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
-    var stompClient=new Array();
-    $(function(){
-        for(var i=0;i<10;i++){
-            stompClient.push(new Object())
-        }
-    })
-    function connects(){
-        for(var i=0; i <10 ;i++){
-            connect(i);
-        }
-    }
-    function disconnects(){
-        for(var i=0; i <10 ;i++){
-            disconnect(i);
-        }
-    }
-    function sendNames(){
-        for(var i=0; i <10 ;i++){
-            sendName(i);
-        }
-    }
-    function sendAlls(){
-        for(var i=0; i <10 ;i++){
-            sendAll(i);
-        }
-    }
-    function setConnected(connected) {
-        document.getElementById('connect').disabled = connected;
-        document.getElementById('disconnect').disabled = !connected;
-        document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
-        $('#response').html();
-    }
+    var url = "ws://127.0.0.1:6661/socketserver";
+    var ws = new WebSocket(url);
+    var stompClient = Stomp.over(ws);
+    var openid = "admin1";
+    var gameStatus = 0;
+    var message = '';
+    stompClient.connect({login:openid,passcode:openid},
+        function(frame) {
+            console.log('开始进行连接Connected: ' + frame);
+            stompClient.subscribe('/user/queue/gobang', function(respnose){ //2 订阅广播
+                if (null != respnose.body && "" != respnose.body){
+                    var msg = $.parseJSON(respnose.body);
+                    if (gameStatus == 0){
+                        gameStatus = 1;
+                        var checkMsg = msg.message.split("_");
+                        //查询用户偶数先手，被查询用户奇数先手（0先手，1后手）
+                        if(checkMsg[0] == openid){
+                            if (checkMsg[1] % 2 == 0){
+                                message = '0';
+                            }else{
+                                message = '1';
+                            }
+                        }else{
+                            if (checkMsg[1] % 2 != 0) {
+                                message = '0';
+                            }else{
+                                message = '1';
+                            }
+                        }
+                        stompClient.send("/gobangToUser", {}, JSON.stringify({ 'gameFlag': 'gobang', 'msgType': gameStatus, 'from': 'admin', 'to': msg.from, 'message': message }));
+                    }else if(gameStatus == 1){
+                        gameStatus=2;
+                        if ((message == '0' && msg.message == '1') || (message == '1' && msg.message == '0')){
+                            stompClient.send("/gobangToUser", {}, JSON.stringify(msg));
+                        }
+                    }else if(gameStatus == 2){
+                    }else if (gameStatus == 3){
 
-    function connect(i) {
-        stompClient[i] = Stomp.client("ws://127.0.0.1:6661/socketserver");
-        var name = $('#name').val();
-        var headParam = {
-            login:name+i,
-            passcode:name+i
-        };
-        stompClient[i].connect(headParam,
-            function(frame) {
-                setConnected(true);
-                console.log('开始进行连接Connected: ' + frame);
-                stompClient[i].subscribe('/user/'+i+'/message', function(respnose){ //2 订阅广播
-                    console.log(respnose.body);
-                    showResponse(respnose.body);//3 接收消息
-                });
-            }
-        );
-    }
-    function disconnect(i) {
-        if (stompClient[i] != null) {
-            stompClient[i].disconnect();
+                    }
+                }
+            });
         }
-        setConnected(false);
-        console.log("Disconnected");
-    }
-    function sendName(i) {// 发送消息
-        var name = $('#name').val();
-        var mname = $('#mname').val();
-        var content = $('#content').val();
-        stompClient[i].send("/app/sendToUser", {}, JSON.stringify({'from': name+1,'to':mname+1,'message':content}));
-    }
-    function sendAll(i) {// 发送消息
-        var name = $('#name').val();
-        stompClient[i].send("/app/sendToAll", {}, JSON.stringify({'from': name+1,'message':'hello every one i am '+name+1}));
-    }
-    function showResponse(message) {
-        var response = $("#response");
-        response.append(message+"</br>");
+    );
+    function sendNames(){
+        // 向服务端发送消息
+        var name = $("#name").val();
+        var mname = $("#mname").val();
+        var content = $("#content").val();
+        stompClient.send("/gobangToUser", {}, JSON.stringify({'gameFlag':'gobang','msgType':'0','from': openid,'to':37,'message':content}));
+        //stompClient.send("/sendToUser", {}, JSON.stringify({'from': 'admin','to':37,'message':'queue'}));
     }
 </script>
-</body>
 </html>

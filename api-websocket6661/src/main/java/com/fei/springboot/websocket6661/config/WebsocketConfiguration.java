@@ -96,7 +96,7 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
                             if(queue.indexOf("queue") <0){
                                 String id = ((Map) raw).get("id").toString();
                                 System.out.println("用户："+user.getName()+"  订阅-->"+queue+"   sessionId-->"+accessor.getSessionId());
-                                userService.addUserQueue(user.getName(),queue,accessor.getSessionId());
+                                userService.addSetUserQueue(accessor.getSessionId(),queue);
                                 userService.addUserQueue(user.getName()+id,"user-queue",queue);
                             }
                         }
@@ -111,10 +111,9 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
                         String queue = userService.getSessionIdQueue(user.getName()+id,"user-queue");
                         System.out.println("用户："+user.getName()+"  退订-->"+queue+"   sessionId-->"+accessor.getSessionId());
                         if(null != queue && !"".equals(queue)){
-                            userService.deleteUserQueue(user.getName(),queue);
+                            userService.delSetUserQueue(accessor.getSessionId(),queue);
                         }
                         userService.deleteUserQueue(user.getName()+id,"user-queue");
-                        //rabbitAdmin.deleteQueue(Constance.queue_pre+userService.getSessionId(accessor.getUser().getName()));
                     }
                 }
                 if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {// 断开连接

@@ -113,7 +113,7 @@ public class ApiIndexController extends ApiBaseAction {
 
         param = new HashMap<String, Object>();
         param.put("offset", 0);
-        param.put("limit", 3);
+        param.put("limit", 5);
         List<TopicVo> topicList = this.topicService.queryList(param);
         resultObj.put("topicList", topicList);
 
@@ -194,7 +194,7 @@ public class ApiIndexController extends ApiBaseAction {
         //
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("offset", 0);
-        param.put("limit", 3);
+        param.put("limit", 5);
         List<TopicVo> topicList = this.topicService.queryList(param);
         resultObj.put("topicList", topicList);
         //

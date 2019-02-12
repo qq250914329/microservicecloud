@@ -53,15 +53,11 @@ public class TokenService {
             tokenEntity.setToken(token);
             tokenEntity.setUpdateTime(now);
             tokenEntity.setExpireTime(expireTime);
-
-            //保存token
             save(tokenEntity);
         } else {
             tokenEntity.setToken(token);
             tokenEntity.setUpdateTime(now);
             tokenEntity.setExpireTime(expireTime);
-
-            //更新token
             update(tokenEntity);
         }
 
