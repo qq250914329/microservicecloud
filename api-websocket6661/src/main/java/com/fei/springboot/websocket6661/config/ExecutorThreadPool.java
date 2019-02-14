@@ -28,11 +28,12 @@ public class ExecutorThreadPool {
                     String catcheId = "";
                     while(gameInfo){
                         catcheId = userService.setRandomQueue(sessionId, catcheQueue);
+                        long search = System.currentTimeMillis() - startTime;
+                        System.out.println("系统匹配时间："+search+"---"+"游戏"+queue+"：玩家"+sessionId+"匹配到"+catcheId);
                         if (null != catcheId && catcheId != "") {
                             gameInfo = false;
                             userService.delSetUserQueue(sessionId,catcheQueue);
-                            long search = System.currentTimeMillis() - startTime;
-                            System.out.println("系统匹配时间："+search+"---"+"游戏"+queue+"：玩家"+sessionId+"匹配到"+catcheId);
+
                             message.setMessage(fromUser+"_"+search);
                             message.setFrom(sessionId);
                             message.setTo(catcheId);
@@ -41,10 +42,10 @@ public class ExecutorThreadPool {
                             message.setTo(sessionId);
                             amqpTemplate.convertAndSend("", queue+sessionId, JSON.toJSONString(message));
                         }
-                        if(System.currentTimeMillis() - startTime >30000){
+                        if(System.currentTimeMillis() - startTime >25000){
                             gameInfo = false;
                         }
-                        Thread.sleep(333);
+                        Thread.sleep(200);
                     }
                 } catch (InterruptedException e) {
 

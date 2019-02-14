@@ -28,11 +28,10 @@ public class PointMessageResource3 {
 				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);
 				break;
 			case "1":	//玩家准备开始
-				System.out.println("用户通讯消息："+message.toString());
 				amqpTemplate.convertAndSend("", queue+message.getTo(), JSON.toJSONString(message));
 				break;
 			case "2":
-				System.out.println("222");
+				amqpTemplate.convertAndSend("", queue+message.getTo(), JSON.toJSONString(message));
 				break;
 			case "3":
 				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);

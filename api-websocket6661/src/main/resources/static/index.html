@@ -27,40 +27,44 @@
     var url = "ws://127.0.0.1:6661/socketserver";
     var ws = new WebSocket(url);
     var stompClient = Stomp.over(ws);
-    var openid = "admin1";
+    var openid = "63";
     var gameStatus = 0;
     var message = '';
+    var userMsg = {gameFlag: 'gobang',msgType: 0,userId: 63, from: '', to:'', message:'到admin' };    //0为寻找玩家，1为游戏双方确认，2为游戏中，3为游戏初始数据，4为游戏结束判定输赢
     stompClient.connect({login:openid,passcode:openid},
         function(frame) {
             console.log('开始进行连接Connected: ' + frame);
             stompClient.subscribe('/user/queue/gobang', function(respnose){ //2 订阅广播
                 if (null != respnose.body && "" != respnose.body){
                     var msg = $.parseJSON(respnose.body);
-                    if (gameStatus == 0){
-                        gameStatus = 1;
+                    if (userMsg.msgType == 0){
+                        userMsg.from = msg.to;
+                        userMsg.to = msg.from;
+                        userMsg.msgType = 1;
                         var checkMsg = msg.message.split("_");
                         //查询用户偶数先手，被查询用户奇数先手（0先手，1后手）
                         if(checkMsg[0] == openid){
                             if (checkMsg[1] % 2 == 0){
-                                message = '0';
+                                userMsg.message = '0';
                             }else{
-                                message = '1';
+                                userMsg.message = '1';
                             }
                         }else{
                             if (checkMsg[1] % 2 != 0) {
-                                message = '0';
+                                userMsg.message = '0';
                             }else{
-                                message = '1';
+                                userMsg.message = '1';
                             }
                         }
-                        stompClient.send("/gobangToUser", {}, JSON.stringify({ 'gameFlag': 'gobang', 'msgType': gameStatus, 'from': 'admin', 'to': msg.from, 'message': message }));
-                    }else if(gameStatus == 1){
-                        gameStatus=2;
+                        stompClient.send("/gobangToUser", {}, JSON.stringify(userMsg));
+                    }else if(userMsg.msgType == 1){
+                        userMsg.msgType=2;
                         if ((message == '0' && msg.message == '1') || (message == '1' && msg.message == '0')){
-                            stompClient.send("/gobangToUser", {}, JSON.stringify(msg));
+                            stompClient.send("/gobangToUser", {}, JSON.stringify(userMsg));
                         }
-                    }else if(gameStatus == 2){
-                    }else if (gameStatus == 3){
+                    }else if(userMsg.msgType == 2){
+
+                    }else if (userMsg.msgType == 3){
 
                     }
                 }
