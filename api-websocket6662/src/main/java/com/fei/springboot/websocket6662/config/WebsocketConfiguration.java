@@ -25,6 +25,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
+import java.security.Principal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -78,18 +79,55 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
     	                if (name instanceof LinkedList) {
     	                    // 设置当前访问器的认证用户
     	                	String userName = ((LinkedList) name).get(0).toString();
-    	                	System.out.println("regist userName:"+userName);
+    	                	System.out.println("用户链接socket:"+userName);
     	                    accessor.setUser(new User(userName));
     	                    userService.addUser(userName, accessor.getSessionId());
     	                }
     	            }
                 }
+                if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {// 用户开启监听
+                    Object raw = message.getHeaders().get(SimpMessageHeaderAccessor.NATIVE_HEADERS);
+                    if (raw instanceof Map) {
+                        Principal user = accessor.getUser();
+                        String queue = ((Map) raw).get("destination").toString();
+                        if(null != queue && !"".equals(queue)){
+                            queue = queue.substring(queue.lastIndexOf("/")+1,queue.length()-1);
+                            if(queue.indexOf("queue") <0){
+                                String id = ((Map) raw).get("id").toString();
+                                System.out.println("用户："+user.getName()+"  订阅-->"+queue+"   sessionId-->"+accessor.getSessionId());
+                                userService.addSetUserQueue(accessor.getSessionId(),queue);
+                                userService.addUserQueue(user.getName()+id,"user-queue",queue);
+                            }
+                        }
+                    }
+                }
+                if (StompCommand.UNSUBSCRIBE.equals(accessor.getCommand())) {// 用户关闭监听
+                    Object raw = message.getHeaders().get(SimpMessageHeaderAccessor.NATIVE_HEADERS);
+                    if (raw instanceof Map) {
+                        Principal user = accessor.getUser();
+                        //将id作为destination传递进来
+                        String id = ((Map) raw).get("id").toString();
+                        String queue = userService.getSessionIdQueue(user.getName()+id,"user-queue");
+                        System.out.println("用户："+user.getName()+"  退订-->"+queue+"   sessionId-->"+accessor.getSessionId());
+                        if(null != queue && !"".equals(queue)){
+                            userService.delSetUserQueue(accessor.getSessionId(),queue);
+                        }
+                        userService.deleteUserQueue(user.getName()+id,"user-queue");
+                    }
+                }
                 if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {// 断开连接
                     try{
+                        //清除订阅的app--queue
+                        Object raw = message.getHeaders().get(SimpMessageHeaderAccessor.NATIVE_HEADERS);
+                        if (raw instanceof Map) {
+                            String id = ((Map) raw).get("id").toString();
+                            Principal user = accessor.getUser();
+                            userService.deleteUserQueue(user.getName()+id,"user-queue");
+                        }
                         userService.deleteUser(accessor.getUser().getName());
                         rabbitAdmin.deleteQueue(Constance.queue_pre+userService.getSessionId(accessor.getUser().getName()));
                     }catch (Exception e){
-
+                        e.printStackTrace();
                     }
                 }
                 return message;

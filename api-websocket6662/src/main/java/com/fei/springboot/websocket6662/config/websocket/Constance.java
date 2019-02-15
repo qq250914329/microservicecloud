@@ -2,7 +2,7 @@ package com.fei.springboot.websocket6662.config.websocket;
 
 public class Constance {
 	//原始信道(必须以-user结尾。。。目前不知道原因)
-	public static final String queue_pre = "wzq-user";
+	public static final String queue_pre = "queue-user";
 	//五子棋信道
 	public static final String gobang="gobang-user";
 	//十点半信道

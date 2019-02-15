@@ -1,5 +1,7 @@
 package com.fei.springboot.websocket6662.web.rest;
 
+import com.alibaba.fastjson.JSON;
+import com.fei.springboot.websocket6662.config.ExecutorThreadPool;
 import com.fei.springboot.websocket6662.config.websocket.Constance;
 import com.fei.springboot.websocket6662.service.UserService;
 import com.fei.springboot.websocket6662.web.dto.Message;
@@ -18,18 +20,40 @@ public class PointMessageResource3 {
 	@Autowired
 	private UserService userService;
 
+	private ExecutorThreadPool executorThreadPool = ExecutorThreadPool.getInstance();
+
+	public void messageHandler(String queue, String sessionId, Message message, String fromUser, UserService userService,AmqpTemplate amqpTemplate){
+		switch(message.getMsgType()){
+			case "0":	//匹配玩家
+				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);
+				break;
+			case "1":	//玩家准备开始
+				amqpTemplate.convertAndSend("", queue+message.getTo(), JSON.toJSONString(message));
+				break;
+			case "2":
+				amqpTemplate.convertAndSend("", queue+message.getTo(), JSON.toJSONString(message));
+				break;
+			case "3":
+				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);
+				break;
+			case "4":
+				executorThreadPool.findPlayer(queue,sessionId,message,fromUser,userService,amqpTemplate);
+				break;
+			default:
+
+				break;
+		}
+	}
+
 	@MessageMapping("/sendToUser")
 	public void point2point3(Message message, SimpMessageHeaderAccessor headerAccessor) {
 		String userId = userService.getSessionId(message.getTo());
-		System.out.println(Constance.queue_pre+userId);
 		amqpTemplate.convertAndSend("", Constance.queue_pre+userId, message.getMessage());
 	}
 
 	@MessageMapping("/gobangToUser")
 	public void gobang(Message message, SimpMessageHeaderAccessor headerAccessor) {
-		String userId = userService.getSessionId(message.getTo());
-		System.out.println(Constance.gobang+userId);
-		amqpTemplate.convertAndSend("", Constance.gobang+userId, message.getMessage());
+		messageHandler(Constance.gobang,headerAccessor.getSessionId(),message,headerAccessor.getUser().getName(),userService,amqpTemplate);
 	}
 
 	@MessageMapping("/pointHarf")
