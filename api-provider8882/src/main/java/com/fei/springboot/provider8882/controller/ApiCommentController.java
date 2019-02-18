@@ -46,10 +46,10 @@ public class ApiCommentController extends ApiBaseAction {
      */
     @ApiOperation(value = "发表评论")
     @PostMapping("post")
-    public Object post(@LoginUser UserVo loginUser) {
+    public Object post(@LoginUser UserVo loginUser,String stringParam) {
         Map resultObj = new HashMap();
         //
-        JSONObject jsonParam = getJsonRequest();
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer typeId = jsonParam.getInteger("typeId");
         Integer valueId = jsonParam.getInteger("valueId");
         String content = jsonParam.getString("content");

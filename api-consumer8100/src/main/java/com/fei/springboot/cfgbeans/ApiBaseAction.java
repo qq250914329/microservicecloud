@@ -125,8 +125,8 @@ public class ApiBaseAction {
         return xff;
     }
 
-    public JSONObject getJsonRequest() {
-        JSONObject result = null;
+    public String getJsonRequest() {
+        String result = null;
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = request.getReader();) {
             char[] buff = new char[1024];
@@ -134,7 +134,7 @@ public class ApiBaseAction {
             while ((len = reader.read(buff)) != -1) {
                 sb.append(buff, 0, len);
             }
-            result = JSONObject.parseObject(sb.toString());
+            result = sb.toString();
         } catch (IOException e) {
             e.printStackTrace();
         }

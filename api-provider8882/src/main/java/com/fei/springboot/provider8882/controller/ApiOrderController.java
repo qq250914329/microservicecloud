@@ -1,5 +1,6 @@
 package com.fei.springboot.provider8882.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fei.springboot.annotation.IgnoreAuth;
 import com.fei.springboot.annotation.LoginUser;
 import com.fei.springboot.domain.OrderGoodsVo;
@@ -156,10 +157,10 @@ public class ApiOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "订单提交")
     @PostMapping("submit")
-    public Object submit(@LoginUser UserVo loginUser) {
+    public Object submit(@LoginUser UserVo loginUser,String stringParam) {
         Map resultObj = null;
         try {
-            resultObj = orderService.submit(getJsonRequest(), loginUser);
+            resultObj = orderService.submit(JSONObject.parseObject(stringParam), loginUser);
             if (null != resultObj) {
                 return toResponsObject(MapUtils.getInteger(resultObj, "errno"), MapUtils.getString(resultObj, "errmsg"), resultObj.get("data"));
             }

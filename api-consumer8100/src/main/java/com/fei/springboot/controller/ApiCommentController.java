@@ -36,7 +36,7 @@ public class ApiCommentController extends ApiBaseAction {
     @ApiOperation(value = "发表评论")
     @PostMapping("post")
     public Object post(@LoginUser UserVo loginUser) {
-        return commentService.post(loginUser);
+        return commentService.post(loginUser,getJsonRequest());
     }
 
     /**

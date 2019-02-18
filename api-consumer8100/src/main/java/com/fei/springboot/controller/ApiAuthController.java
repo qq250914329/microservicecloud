@@ -51,6 +51,6 @@ public class ApiAuthController extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("login_by_weixin")
     public Object loginByWeixin() {
-        return service.loginByWeixin();
+        return service.loginByWeixin(getJsonRequest());
     }
 }

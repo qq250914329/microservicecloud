@@ -1,6 +1,7 @@
 package com.fei.springboot.controller;
 
 import com.fei.springboot.annotation.LoginUser;
+import com.fei.springboot.cfgbeans.ApiBaseAction;
 import com.fei.springboot.domain.UserVo;
 import com.fei.springboot.service.FeignApiAddressService;
 import io.swagger.annotations.Api;
@@ -24,7 +25,7 @@ import java.util.Map;
 @Api(tags = "收货地址")
 @RestController
 @RequestMapping("/api/address")
-public class ApiAddressController {
+public class ApiAddressController extends ApiBaseAction{
     @Autowired
     FeignApiAddressService service;
     /**
@@ -52,7 +53,7 @@ public class ApiAddressController {
     @ApiOperation(value = "添加或更新收货地址", response = Map.class)
     @PostMapping("save")
     public Object save(@LoginUser UserVo loginUser) {
-        return service.save(loginUser);
+        return service.save(loginUser,getJsonRequest());
     }
 
     /**
@@ -61,6 +62,6 @@ public class ApiAddressController {
     @ApiOperation(value = "删除指定的收货地址", response = Map.class)
     @PostMapping("delete")
     public Object delete(@LoginUser UserVo loginUser) {
-        return service.delete(loginUser);
+        return service.delete(loginUser,getJsonRequest());
     }
 }

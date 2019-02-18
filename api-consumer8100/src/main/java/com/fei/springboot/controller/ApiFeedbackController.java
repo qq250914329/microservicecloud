@@ -33,6 +33,6 @@ public class ApiFeedbackController extends ApiBaseAction {
     @ApiOperation(value = "添加反馈")
     @PostMapping("save")
     public Object save(@LoginUser UserVo loginUser) {
-        return feedbackService.save(loginUser);
+        return feedbackService.save(loginUser,getJsonRequest());
     }
 }

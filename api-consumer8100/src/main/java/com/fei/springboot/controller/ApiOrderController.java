@@ -79,7 +79,7 @@ public class ApiOrderController extends ApiBaseAction {
     @ApiOperation(value = "订单提交")
     @PostMapping("submit")
     public Object submit(@LoginUser UserVo loginUser) {
-        return orderService.submit(loginUser);
+        return orderService.submit(loginUser,getJsonRequest());
     }
 
     /**

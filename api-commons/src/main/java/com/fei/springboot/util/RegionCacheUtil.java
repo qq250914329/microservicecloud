@@ -17,9 +17,12 @@ public class RegionCacheUtil implements InitializingBean {
     public static List<SysRegionEntity> sysRegionEntityList;
 
     public static void init() {
+        /*SysRegionDao regionDao = SpringContextUtils.getBean(SysRegionDao.class);
+        if (null != regionDao) {
+            sysRegionEntityList = regionDao.queryList(new HashMap<String, Object>());
+        }*/
+        System.out.println("地市数据初始化。。。");
     }
-
-
 
     //计时器
     public void timer() {

@@ -1,6 +1,7 @@
 package com.fei.springboot.service;
 
 import com.fei.springboot.annotation.LoginUser;
+import com.fei.springboot.config.FeignConfiguration;
 import com.fei.springboot.domain.UserVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@FeignClient(value = "API-PROVIDER")
+@FeignClient(value = "API-PROVIDER",  configuration = FeignConfiguration.class)
 public interface FeignApiPayService {
     /**
      */

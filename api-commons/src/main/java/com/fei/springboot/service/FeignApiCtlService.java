@@ -1,5 +1,6 @@
 package com.fei.springboot.service;
 
+import com.fei.springboot.config.FeignConfiguration;
 import com.fei.springboot.domain.UserVo;
 import org.apache.http.HttpRequest;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 
-@FeignClient(value = "API-PROVIDER")
+@FeignClient(value = "API-PROVIDER",  configuration = FeignConfiguration.class)
 public interface FeignApiCtlService {
     /**
      * 获取用户的收货地址

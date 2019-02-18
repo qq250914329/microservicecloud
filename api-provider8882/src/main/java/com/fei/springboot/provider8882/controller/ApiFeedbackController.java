@@ -32,8 +32,9 @@ public class ApiFeedbackController extends ApiBaseAction {
      */
     @ApiOperation(value = "添加反馈")
     @PostMapping("save")
-    public Object save(@LoginUser UserVo loginUser) {
-        JSONObject feedbackJson = super.getJsonRequest();
+    public Object save(@LoginUser UserVo loginUser,String stringParam) {
+        //JSONObject feedbackJson = getJsonRequest();
+        JSONObject feedbackJson = JSONObject.parseObject(stringParam);
         if (null != feedbackJson) {
             FeedbackVo feedbackVo = new FeedbackVo();
             feedbackVo.setUserId(loginUser.getUserId().intValue());

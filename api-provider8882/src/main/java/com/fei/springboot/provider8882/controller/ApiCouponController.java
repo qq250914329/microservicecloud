@@ -102,8 +102,8 @@ public class ApiCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "领券优惠券")
     @PostMapping("exchange")
-    public Object exchange(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object exchange(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         String coupon_number = jsonParam.getString("coupon_number");
         if (StringUtils.isNullOrEmpty(coupon_number)) {
             return toResponsFail("当前优惠码无效");
@@ -135,8 +135,8 @@ public class ApiCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "领券优惠券")
     @PostMapping("newuser")
-    public Object newuser(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object newuser(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         //
         String phone = jsonParam.getString("phone");
         String smscode = jsonParam.getString("smscode");
@@ -186,8 +186,8 @@ public class ApiCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "转发领取红包")
     @PostMapping("transActivit")
-    public Object transActivit(@LoginUser UserVo loginUser, String sourceKey, Long referrer) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object transActivit(@LoginUser UserVo loginUser, String sourceKey, Long referrer,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         // 是否领取过了
         Map params = new HashMap();
         params.put("user_id", loginUser.getUserId());

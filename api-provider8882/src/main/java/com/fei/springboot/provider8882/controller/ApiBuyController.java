@@ -19,8 +19,8 @@ public class ApiBuyController extends ApiBaseAction {
 
     @ApiOperation(value = "商品添加")
     @PostMapping("/add")
-    public Object addBuy(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object addBuy(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");

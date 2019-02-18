@@ -2,6 +2,7 @@ package com.fei.springboot.service;
 
 import com.fei.springboot.annotation.IgnoreAuth;
 import com.fei.springboot.annotation.LoginUser;
+import com.fei.springboot.config.FeignConfiguration;
 import com.fei.springboot.domain.UserVo;
 import com.fei.springboot.util.R;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(value = "API-PROVIDER")
+@FeignClient(value = "API-PROVIDER",  configuration = FeignConfiguration.class)
 public interface FeignApiTestService {
     /**
      * 获取用户信息

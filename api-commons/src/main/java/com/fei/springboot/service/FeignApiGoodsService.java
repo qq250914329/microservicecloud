@@ -2,6 +2,7 @@ package com.fei.springboot.service;
 
 import com.fei.springboot.annotation.IgnoreAuth;
 import com.fei.springboot.annotation.LoginUser;
+import com.fei.springboot.config.FeignConfiguration;
 import com.fei.springboot.domain.UserVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(value = "API-PROVIDER")
+@FeignClient(value = "API-PROVIDER",  configuration = FeignConfiguration.class)
 public interface FeignApiGoodsService {
     @PostMapping(value = "/api/goods/index")
     public Object index();

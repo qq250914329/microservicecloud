@@ -1,6 +1,7 @@
 package com.fei.springboot.service;
 
 import com.fei.springboot.annotation.IgnoreAuth;
+import com.fei.springboot.config.FeignConfiguration;
 import com.fei.springboot.domain.RegionVo;
 import com.fei.springboot.domain.SysRegionEntity;
 import com.fei.springboot.util.RegionCacheUtil;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(value = "API-PROVIDER")
+@FeignClient(value = "API-PROVIDER",  configuration = FeignConfiguration.class)
 public interface FeignApiRegionService {
     @PostMapping("/api/region/list")
     public Object list(@RequestParam("parentId") Integer parentId);

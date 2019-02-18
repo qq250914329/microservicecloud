@@ -57,7 +57,7 @@ public class ApiCouponController extends ApiBaseAction {
     @ApiOperation(value = "领券优惠券")
     @PostMapping("exchange")
     public Object exchange(@LoginUser UserVo loginUser) {
-        return couponService.exchange(loginUser);
+        return couponService.exchange(loginUser,getJsonRequest());
     }
 
     /**
@@ -66,7 +66,7 @@ public class ApiCouponController extends ApiBaseAction {
     @ApiOperation(value = "领券优惠券")
     @PostMapping("newuser")
     public Object newuser(@LoginUser UserVo loginUser) {
-        return couponService.newuser(loginUser);
+        return couponService.newuser(loginUser,getJsonRequest());
     }
 
     /**
@@ -75,6 +75,6 @@ public class ApiCouponController extends ApiBaseAction {
     @ApiOperation(value = "转发领取红包")
     @PostMapping("transActivit")
     public Object transActivit(@LoginUser UserVo loginUser, String sourceKey, Long referrer) {
-        return couponService.transActivit(loginUser,sourceKey,referrer);
+        return couponService.transActivit(loginUser,sourceKey,referrer,getJsonRequest());
     }
 }

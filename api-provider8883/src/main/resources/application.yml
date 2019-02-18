@@ -46,7 +46,7 @@ mysql:
         mapperLocations: classpath:mybatis/*.xml
         configLocation: classpath:/mybatis-config.xml
         write:
-           url: jdbc:mysql://127.0.0.1:3306/mall02?useUnicode=true&amp;characterEncoding=utf-8
+           url: jdbc:mysql://127.0.0.1:3306/mall01?useUnicode=true&amp;characterEncoding=utf-8
            username: root
            password: root
            driver-class-name: com.mysql.jdbc.Driver
@@ -65,7 +65,7 @@ mysql:
            removeAbandoned: true
            filters: stat
         read01:
-           url: jdbc:mysql://127.0.0.1:3306/mall02?useUnicode=true&amp;characterEncoding=utf-8
+           url: jdbc:mysql://127.0.0.1:3306/mall01?useUnicode=true&amp;characterEncoding=utf-8
            username: root
            password: root
            driver-class-name: com.mysql.jdbc.Driver
@@ -84,7 +84,7 @@ mysql:
            removeAbandoned: true
            filters: stat
         read02:
-           url: jdbc:mysql://127.0.0.1:3306/mall02?useUnicode=true&amp;characterEncoding=utf-8
+           url: jdbc:mysql://127.0.0.1:3306/mall01?useUnicode=true&amp;characterEncoding=utf-8
            username: root
            password: root
            driver-class-name: com.mysql.jdbc.Driver

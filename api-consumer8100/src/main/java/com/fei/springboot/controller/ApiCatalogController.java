@@ -44,7 +44,7 @@ public class ApiCatalogController extends ApiBaseAction {
                         @RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer size,
                         @RequestParam(value = "isShow") Integer isShow) {
-        return categoryService.index(id,page,page,size);
+        return categoryService.index(id,page,size,isShow);
     }
 
     /**

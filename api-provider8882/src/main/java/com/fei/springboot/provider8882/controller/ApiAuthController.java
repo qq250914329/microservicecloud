@@ -9,6 +9,7 @@ import com.fei.springboot.provider8882.service.ApiUserService;
 import com.fei.springboot.provider8882.service.TokenService;
 import com.fei.springboot.provider8882.util.ApiBaseAction;
 import com.fei.springboot.util.*;
+import com.qiniu.util.Json;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.MapUtils;
@@ -64,8 +65,8 @@ public class ApiAuthController extends ApiBaseAction {
     @ApiOperation(value = "登录")
     @IgnoreAuth
     @PostMapping("login_by_weixin")
-    public Object loginByWeixin() {
-        JSONObject jsonParam = this.getJsonRequest();
+    public Object loginByWeixin(String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         FullUserInfo fullUserInfo = null;
         String code = "";
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("code"))) {

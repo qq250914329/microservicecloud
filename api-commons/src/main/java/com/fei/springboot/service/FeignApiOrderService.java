@@ -2,15 +2,14 @@ package com.fei.springboot.service;
 
 import com.fei.springboot.annotation.IgnoreAuth;
 import com.fei.springboot.annotation.LoginUser;
+import com.fei.springboot.config.FeignConfiguration;
 import com.fei.springboot.domain.UserVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
-@FeignClient(value = "API-PROVIDER")
+@FeignClient(value = "API-PROVIDER",  configuration = FeignConfiguration.class)
 public interface FeignApiOrderService {
 
     @PostMapping("/api/order/index")
@@ -35,8 +34,8 @@ public interface FeignApiOrderService {
     /**
      * 获取订单列表
      */
-    @PostMapping("/api/order/submit")
-    public Object submit(@RequestBody UserVo loginUser);
+    @RequestMapping(value = "/api/order/submit", method = RequestMethod.POST ,consumes = "application/json")
+    public Object submit(@RequestBody UserVo loginUser,@RequestParam("stringParam")String stringParam);
 
     /**
      * 获取订单列表

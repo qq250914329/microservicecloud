@@ -1,5 +1,6 @@
 package com.fei.springboot.provider8882.dbconfig;
 
+import com.fei.springboot.provider8882.util.RegionCacheUtil;
 import com.fei.springboot.provider8882.util.SpringContextUtil;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
@@ -167,5 +168,4 @@ public class MybatisConfiguration {
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new DataSourceTransactionManager((DataSource) SpringContextUtil.getBean("roundRobinDataSouceProxy"));
     }
-    
 }

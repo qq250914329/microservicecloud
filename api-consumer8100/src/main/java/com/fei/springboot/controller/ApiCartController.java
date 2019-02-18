@@ -57,7 +57,7 @@ public class ApiCartController extends ApiBaseAction {
     @ApiOperation(value = "添加商品到购物车")
     @PostMapping("add")
     public Object add(@LoginUser UserVo loginUser) {
-        return service.add(loginUser);
+        return service.add(loginUser,getJsonRequest());
     }
 
     /**
@@ -66,7 +66,7 @@ public class ApiCartController extends ApiBaseAction {
     @ApiOperation(value = "减少商品到购物车")
     @PostMapping("minus")
     public Object minus(@LoginUser UserVo loginUser) {
-        return service.minus(loginUser);
+        return service.minus(loginUser,getJsonRequest());
     }
 
     /**
@@ -75,7 +75,7 @@ public class ApiCartController extends ApiBaseAction {
     @ApiOperation(value = "更新指定的购物车信息")
     @PostMapping("update")
     public Object update(@LoginUser UserVo loginUser) {
-        return service.update(loginUser);
+        return service.update(loginUser,getJsonRequest());
     }
 
     /**
@@ -84,14 +84,14 @@ public class ApiCartController extends ApiBaseAction {
     @ApiOperation(value = "是否选择商品")
     @PostMapping("checked")
     public Object checked(@LoginUser UserVo loginUser) {
-        return service.checked(loginUser);
+        return service.checked(loginUser,getJsonRequest());
     }
 
     //删除选中的购物车商品，批量删除
     @ApiOperation(value = "删除商品")
     @PostMapping("delete")
     public Object delete(@LoginUser UserVo loginUser) {
-        return service.delete(loginUser);
+        return service.delete(loginUser,getJsonRequest());
     }
 
     //  获取购物车商品的总件件数

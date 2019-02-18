@@ -44,6 +44,6 @@ public class ApiCollectController extends ApiBaseAction {
     @ApiOperation(value = "添加取消收藏")
     @PostMapping("addordelete")
     public Object addordelete(@LoginUser UserVo loginUser) {
-        return collectService.addordelete(loginUser);
+        return collectService.addordelete(loginUser,getJsonRequest());
     }
 }
