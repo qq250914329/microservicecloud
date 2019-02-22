@@ -1,8 +1,7 @@
 package com.fei.springboot.provider8883.util;
 
-import com.fei.springboot.provider8883.dao.SysRegionDao;
 import com.fei.springboot.domain.SysRegionEntity;
-import com.fei.springboot.provider8883.util.SpringContextUtils;
+import com.fei.springboot.provider8883.dao.SysRegionDao;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.*;

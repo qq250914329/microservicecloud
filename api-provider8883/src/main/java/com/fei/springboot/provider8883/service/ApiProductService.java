@@ -2,8 +2,8 @@ package com.fei.springboot.provider8883.service;
 
 import com.fei.springboot.annotation.ReadDataSource;
 import com.fei.springboot.annotation.WriteDataSource;
-import com.fei.springboot.provider8883.dao.ApiProductMapper;
 import com.fei.springboot.domain.ProductVo;
+import com.fei.springboot.provider8883.dao.ApiProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,14 +2,16 @@ package com.fei.springboot.provider8883.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fei.springboot.annotation.LoginUser;
-import com.fei.springboot.provider8883.dao.ApiCouponMapper;
 import com.fei.springboot.domain.*;
+import com.fei.springboot.provider8883.dao.ApiCouponMapper;
+import com.fei.springboot.provider8883.dao.ApiSpecificationMapper;
 import com.fei.springboot.provider8883.service.*;
 import com.fei.springboot.provider8883.util.ApiBaseAction;
 import com.fei.springboot.util.J2CacheUtils;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +47,8 @@ public class ApiCartController extends ApiBaseAction {
     private ApiCouponService apiCouponService;
     @Autowired
     private ApiCouponMapper apiCouponMapper;
+    @Autowired
+    private ApiSpecificationMapper apiSpecificationMapper;
 
     /**
      * 获取购物车中的数据
@@ -147,8 +151,8 @@ public class ApiCartController extends ApiBaseAction {
      */
     @ApiOperation(value = "添加商品到购物车")
     @PostMapping("add")
-    public Object add(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object add(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");
@@ -219,8 +223,8 @@ public class ApiCartController extends ApiBaseAction {
      */
     @ApiOperation(value = "减少商品到购物车")
     @PostMapping("minus")
-    public Object minus(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object minus(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");
@@ -250,8 +254,8 @@ public class ApiCartController extends ApiBaseAction {
      */
     @ApiOperation(value = "更新指定的购物车信息")
     @PostMapping("update")
-    public Object update(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object update(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");
@@ -337,8 +341,8 @@ public class ApiCartController extends ApiBaseAction {
      */
     @ApiOperation(value = "是否选择商品")
     @PostMapping("checked")
-    public Object checked(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object checked(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         String productIds = jsonParam.getString("productIds");
         Integer isChecked = jsonParam.getInteger("isChecked");
         if (StringUtils.isNullOrEmpty(productIds)) {
@@ -352,11 +356,11 @@ public class ApiCartController extends ApiBaseAction {
     //删除选中的购物车商品，批量删除
     @ApiOperation(value = "删除商品")
     @PostMapping("delete")
-    public Object delete(@LoginUser UserVo loginUser) {
+    public Object delete(@LoginUser UserVo loginUser,String stringParam) {
         Long userId = loginUser.getUserId();
 
-        JSONObject jsonObject = getJsonRequest();
-        String productIds = jsonObject.getString("productIds");
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
+        String productIds = jsonParam.getString("productIds");
 
         if (StringUtils.isNullOrEmpty(productIds)) {
             return toResponsFail("删除出错");
@@ -400,14 +404,10 @@ public class ApiCartController extends ApiBaseAction {
     @PostMapping("checkout")
     public Object checkout(@LoginUser UserVo loginUser, Integer couponId, @RequestParam(defaultValue = "cart") String type) {
         Map<String, Object> resultObj = new HashMap();
-        //根据收货地址计算运费
-
-        BigDecimal freightPrice = new BigDecimal(0.00);
         //默认收货地址
         Map param = new HashMap();
         param.put("user_id", loginUser.getUserId());
         List addressEntities = this.addressService.queryList(param);
-
         if (null == addressEntities || addressEntities.size() == 0) {
             resultObj.put("checkedAddress", new AddressVo());
         } else {
@@ -418,7 +418,6 @@ public class ApiCartController extends ApiBaseAction {
         BigDecimal goodsTotalPrice;
         if (type.equals("cart")) {
             Map<String, Object> cartData = (Map<String, Object>) this.getCart(loginUser);
-
             for (CartVo cartEntity : (List<CartVo>) cartData.get("cartList")) {
                 if (cartEntity.getChecked() == 1) {
                     checkedGoodsList.add(cartEntity);
@@ -428,10 +427,8 @@ public class ApiCartController extends ApiBaseAction {
         } else { // 是直接购买的
             BuyGoodsVo goodsVO = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
             ProductVo productInfo = this.productService.queryObject(goodsVO.getProductId());
-            //计算订单的费用
-            //商品总价
+            //计算订单的费用  //商品总价
             goodsTotalPrice = productInfo.getRetail_price().multiply(new BigDecimal(goodsVO.getNumber()));
-
             CartVo cartVo = new CartVo();
             cartVo.setGoods_name(productInfo.getGoods_name());
             cartVo.setNumber(goodsVO.getNumber());
@@ -439,8 +436,14 @@ public class ApiCartController extends ApiBaseAction {
             cartVo.setList_pic_url(productInfo.getList_pic_url());
             checkedGoodsList.add(cartVo);
         }
-
-
+        //根据价格计算运费
+        BigDecimal freightPrice;
+        SpecificationVo specificationVo = this.apiSpecificationMapper.queryObject(4);//规格设置中的第四个数当作包邮价格
+        if(goodsTotalPrice.compareTo(new BigDecimal(specificationVo.getName())) == 1){
+            freightPrice = new BigDecimal(0.00);
+        }else{
+            freightPrice = new BigDecimal(6.90);
+        }
         //获取可用的优惠券信息
         BigDecimal couponPrice = new BigDecimal(0.00);
         if (couponId != null && couponId != 0) {
@@ -449,15 +452,11 @@ public class ApiCartController extends ApiBaseAction {
                 couponPrice = couponVo.getType_money();
             }
         }
-
         //订单的总价
         BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice);
-
-        //
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice);  //减去其它支付的金额后，要实际支付的金额
 
         resultObj.put("freightPrice", freightPrice);
-
         resultObj.put("couponPrice", couponPrice);
         resultObj.put("checkedGoodsList", checkedGoodsList);
         resultObj.put("goodsTotalPrice", goodsTotalPrice);

@@ -63,8 +63,8 @@ public class ApiAddressController extends ApiBaseAction {
      */
     @ApiOperation(value = "添加或更新收货地址", response = Map.class)
     @PostMapping("save")
-    public Object save(@LoginUser UserVo loginUser) {
-        JSONObject addressJson = this.getJsonRequest();
+    public Object save(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject addressJson = JSONObject.parseObject(stringParam);
         AddressVo entity = new AddressVo();
         if (null != addressJson) {
             entity.setId(addressJson.getLong("id"));
@@ -93,8 +93,8 @@ public class ApiAddressController extends ApiBaseAction {
      */
     @ApiOperation(value = "删除指定的收货地址", response = Map.class)
     @PostMapping("delete")
-    public Object delete(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = this.getJsonRequest();
+    public Object delete(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer id = jsonParam.getIntValue("id");
 
         AddressVo entity = this.addressService.queryObject(id);

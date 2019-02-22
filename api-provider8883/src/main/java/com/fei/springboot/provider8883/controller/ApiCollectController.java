@@ -52,8 +52,8 @@ public class ApiCollectController extends ApiBaseAction {
      */
     @ApiOperation(value = "添加取消收藏")
     @PostMapping("addordelete")
-    public Object addordelete(@LoginUser UserVo loginUser) {
-        JSONObject jsonParam = getJsonRequest();
+    public Object addordelete(@LoginUser UserVo loginUser,String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer typeId = jsonParam.getInteger("typeId");
         Integer valueId = jsonParam.getInteger("valueId");
 

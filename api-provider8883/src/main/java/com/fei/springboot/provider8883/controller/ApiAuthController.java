@@ -64,8 +64,8 @@ public class ApiAuthController extends ApiBaseAction {
     @ApiOperation(value = "登录")
     @IgnoreAuth
     @PostMapping("login_by_weixin")
-    public Object loginByWeixin() {
-        JSONObject jsonParam = this.getJsonRequest();
+    public Object loginByWeixin(String stringParam) {
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         FullUserInfo fullUserInfo = null;
         String code = "";
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("code"))) {

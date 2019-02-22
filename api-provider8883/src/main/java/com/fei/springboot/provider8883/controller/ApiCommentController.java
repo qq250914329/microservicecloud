@@ -7,7 +7,10 @@ import com.fei.springboot.annotation.LoginUser;
 import com.fei.springboot.domain.*;
 import com.fei.springboot.provider8883.service.*;
 import com.fei.springboot.provider8883.util.ApiBaseAction;
-import com.fei.springboot.util.*;
+import com.fei.springboot.util.ApiPageUtils;
+import com.fei.springboot.util.CharUtil;
+import com.fei.springboot.util.Query;
+import com.fei.springboot.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +46,10 @@ public class ApiCommentController extends ApiBaseAction {
      */
     @ApiOperation(value = "发表评论")
     @PostMapping("post")
-    public Object post(@LoginUser UserVo loginUser) {
+    public Object post(@LoginUser UserVo loginUser,String stringParam) {
         Map resultObj = new HashMap();
         //
-        JSONObject jsonParam = getJsonRequest();
+        JSONObject jsonParam = JSONObject.parseObject(stringParam);
         Integer typeId = jsonParam.getInteger("typeId");
         Integer valueId = jsonParam.getInteger("valueId");
         String content = jsonParam.getString("content");

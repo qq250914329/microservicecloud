@@ -2,8 +2,8 @@ package com.fei.springboot.provider8883.service;
 
 import com.fei.springboot.annotation.ReadDataSource;
 import com.fei.springboot.annotation.WriteDataSource;
-import com.fei.springboot.provider8883.dao.UserMapper;
 import com.fei.springboot.domain.User;
+import com.fei.springboot.provider8883.dao.UserMapper;
 import com.fei.springboot.provider8883.util.SpringContextUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

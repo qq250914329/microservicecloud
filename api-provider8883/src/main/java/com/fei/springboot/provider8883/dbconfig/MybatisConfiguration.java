@@ -167,5 +167,4 @@ public class MybatisConfiguration {
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new DataSourceTransactionManager((DataSource) SpringContextUtil.getBean("roundRobinDataSouceProxy"));
     }
-    
 }

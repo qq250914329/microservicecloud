@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fei.springboot.provider8883.dao.ApiTokenMapper">
+<!--
 
 	<select id="queryByUserId" resultType="com.fei.springboot.domain.TokenEntity">
 		select * from tb_token where user_id = #{userId}
@@ -37,5 +38,6 @@
 		</set>
 		where user_id = #{userId}
 	</update>
+-->
 
 </mapper>

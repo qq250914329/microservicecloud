@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fei.springboot.annotation.LoginUser;
 import com.fei.springboot.domain.*;
 import com.fei.springboot.provider8882.dao.ApiCouponMapper;
+import com.fei.springboot.provider8882.dao.ApiSpecificationMapper;
 import com.fei.springboot.provider8882.service.*;
 import com.fei.springboot.provider8882.util.ApiBaseAction;
 import com.fei.springboot.util.J2CacheUtils;
@@ -45,7 +46,8 @@ public class ApiCartController extends ApiBaseAction {
     private ApiCouponService apiCouponService;
     @Autowired
     private ApiCouponMapper apiCouponMapper;
-
+    @Autowired
+    private ApiSpecificationMapper apiSpecificationMapper;
     /**
      * 获取购物车中的数据
      */
@@ -400,14 +402,10 @@ public class ApiCartController extends ApiBaseAction {
     @PostMapping("checkout")
     public Object checkout(@LoginUser UserVo loginUser, Integer couponId, @RequestParam(defaultValue = "cart") String type) {
         Map<String, Object> resultObj = new HashMap();
-        //根据收货地址计算运费
-
-        BigDecimal freightPrice = new BigDecimal(0.00);
         //默认收货地址
         Map param = new HashMap();
         param.put("user_id", loginUser.getUserId());
         List addressEntities = this.addressService.queryList(param);
-
         if (null == addressEntities || addressEntities.size() == 0) {
             resultObj.put("checkedAddress", new AddressVo());
         } else {
@@ -418,7 +416,6 @@ public class ApiCartController extends ApiBaseAction {
         BigDecimal goodsTotalPrice;
         if (type.equals("cart")) {
             Map<String, Object> cartData = (Map<String, Object>) this.getCart(loginUser);
-
             for (CartVo cartEntity : (List<CartVo>) cartData.get("cartList")) {
                 if (cartEntity.getChecked() == 1) {
                     checkedGoodsList.add(cartEntity);
@@ -428,10 +425,8 @@ public class ApiCartController extends ApiBaseAction {
         } else { // 是直接购买的
             BuyGoodsVo goodsVO = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
             ProductVo productInfo = this.productService.queryObject(goodsVO.getProductId());
-            //计算订单的费用
-            //商品总价
+            //计算订单的费用  //商品总价
             goodsTotalPrice = productInfo.getRetail_price().multiply(new BigDecimal(goodsVO.getNumber()));
-
             CartVo cartVo = new CartVo();
             cartVo.setGoods_name(productInfo.getGoods_name());
             cartVo.setNumber(goodsVO.getNumber());
@@ -439,7 +434,6 @@ public class ApiCartController extends ApiBaseAction {
             cartVo.setList_pic_url(productInfo.getList_pic_url());
             checkedGoodsList.add(cartVo);
         }
-
 
         //获取可用的优惠券信息
         BigDecimal couponPrice = new BigDecimal(0.00);
@@ -449,15 +443,19 @@ public class ApiCartController extends ApiBaseAction {
                 couponPrice = couponVo.getType_money();
             }
         }
-
+        //根据价格计算运费
+        BigDecimal freightPrice;
+        SpecificationVo specificationVo = this.apiSpecificationMapper.queryObject(4);//规格设置中的第四个数当作包邮价格
+        if(goodsTotalPrice.compareTo(new BigDecimal(specificationVo.getName())) == 1){
+            freightPrice = new BigDecimal(0.00);
+        }else{
+            freightPrice = new BigDecimal(6.90);
+        }
         //订单的总价
         BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice);
-
-        //
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice);  //减去其它支付的金额后，要实际支付的金额
 
         resultObj.put("freightPrice", freightPrice);
-
         resultObj.put("couponPrice", couponPrice);
         resultObj.put("checkedGoodsList", checkedGoodsList);
         resultObj.put("goodsTotalPrice", goodsTotalPrice);
