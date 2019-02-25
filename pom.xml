@@ -94,6 +94,7 @@
 		<module>api-provider8881</module>
 		<module>api-provider8882</module>
 		<module>api-provider8883</module>
+		<module>api-memory9991</module>
 		<module>api-websocket6661</module>
 		<module>api-websocket6662</module>
 		<module>microservicecloud-eureka-7001</module>
