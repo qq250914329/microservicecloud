@@ -15,7 +15,8 @@ public interface FeignApiTopicService {
     @IgnoreAuth
     @PostMapping("/api/topic/list")
     public Object list(@RequestParam("page") Integer page,
-                       @RequestParam("size") Integer size);
+                       @RequestParam("size") Integer size,
+                       @RequestParam("type") Integer type);
 
     /**
      */

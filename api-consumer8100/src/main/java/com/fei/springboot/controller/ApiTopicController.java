@@ -34,8 +34,9 @@ public class ApiTopicController extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("list")
     public Object list(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-        return topicService.list(page,size);
+                       @RequestParam(value = "size", defaultValue = "10") Integer size,
+                       @RequestParam(value = "type", defaultValue = "10") Integer type) {
+        return topicService.list(page,size,type);
     }
 
     /**

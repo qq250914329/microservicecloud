@@ -34,10 +34,12 @@ public class ApiTopicController extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("list")
     public Object list(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+                       @RequestParam(value = "size", defaultValue = "10") Integer size,
+                       @RequestParam(value = "type", defaultValue = "10") Integer type) {
         Map param = new HashMap();
         param.put("page", page);
         param.put("limit", size);
+        param.put("type", type);
         param.put("sidx", "id");
         param.put("order", "desc");
         param.put("fields", "id, title, price_info, scene_pic_url,subtitle");

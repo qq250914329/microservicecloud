@@ -31,7 +31,10 @@
         <if test="fields == null or fields == ''">
             *
         </if>
-        from nideshop_topic
+        from nideshop_topic where 1=1
+        <if test="type != null and type != ''">
+            and topic_category_id = ${type}
+        </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
