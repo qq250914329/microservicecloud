@@ -42,7 +42,7 @@ public class ApiTopicController extends ApiBaseAction {
         param.put("type", type);
         param.put("sidx", "id");
         param.put("order", "desc");
-        param.put("fields", "id, title, price_info, scene_pic_url,subtitle");
+        param.put("fields", "id, title, price_info, scene_pic_url,subtitle,avatar");
         //查询列表数据
         Query query = new Query(param);
         List<TopicVo> topicEntities = topicService.queryList(query);

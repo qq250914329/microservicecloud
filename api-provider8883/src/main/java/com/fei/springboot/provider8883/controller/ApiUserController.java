@@ -1,18 +1,12 @@
-package com.fei.springboot.provider8883.controller;/*
-package com.fei.springboot.controller;
+package com.fei.springboot.provider8883.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fei.springboot.annotation.LoginUser;
-import com.fei.springboot.domain.SmsConfig;
 import com.fei.springboot.domain.SmsLogVo;
 import com.fei.springboot.domain.UserVo;
 import com.fei.springboot.provider8883.service.ApiUserService;
-import com.fei.springboot.provider8883.service.SysConfigService;
-import com.fei.springboot.util.ApiBaseAction;
+import com.fei.springboot.provider8883.util.ApiBaseAction;
 import com.fei.springboot.util.CharUtil;
-import com.fei.springboot.util.Constant;
-import com.fei.springboot.util.SmsUtil;
-import com.fei.springboot.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-*/
 /**
  * 作者: @author Harmon <br>
  * 时间: 2017-08-11 08:32<br>
  * 描述: ApiIndexController <br>
- *//*
+ */
 
 @Api(tags = "会员验证")
 @RestController
@@ -33,13 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiUserController extends ApiBaseAction {
     @Autowired
     private ApiUserService userService;
-    @Autowired
-    private SysConfigService sysConfigService;
 
-    */
-/**
+    /**
      * 发送短信
-     *//*
+     */
 
     @ApiOperation(value = "发送短信")
     @PostMapping("smscode")
@@ -54,34 +44,8 @@ public class ApiUserController extends ApiBaseAction {
         //生成验证码
         String sms_code = CharUtil.getRandomNum(4);
         String msgContent = "您的验证码是：" + sms_code + "，请在页面中提交验证码完成验证。";
-        // 发送短信
         String result = "";
-        //获取云存储配置信息
-        SmsConfig config = sysConfigService.getConfigObject(Constant.SMS_CONFIG_KEY, SmsConfig.class);
-        if (StringUtils.isNullOrEmpty(config)) {
-            return toResponsFail("请先配置短信平台信息");
-        }
-        if (StringUtils.isNullOrEmpty(config.getName())) {
-            return toResponsFail("请先配置短信平台用户名");
-        }
-        if (StringUtils.isNullOrEmpty(config.getPwd())) {
-            return toResponsFail("请先配置短信平台密钥");
-        }
-        if (StringUtils.isNullOrEmpty(config.getSign())) {
-            return toResponsFail("请先配置短信平台签名");
-        }
-        try {
-            */
-/**
-             * 状态,发送编号,无效号码数,成功提交数,黑名单数和消息，无论发送的号码是多少，一个发送请求只返回一个sendid，如果响应的状态不是“0”，则只有状态和消息
-             *//*
-
-            result = SmsUtil.crSendSms(config.getName(), config.getPwd(), phone, msgContent, config.getSign(), "", "");
-        } catch (Exception e) {
-
-        }
         String arr[] = result.split(",");
-
         if ("0".equals(arr[0])) {
             smsLogVo = new SmsLogVo();
             smsLogVo.setLog_date(System.currentTimeMillis() / 1000);
@@ -95,8 +59,7 @@ public class ApiUserController extends ApiBaseAction {
             return toResponsFail("短信发送失败");
         }
     }
-
-    */
+}
 /**
      * 获取当前会员等级
      *

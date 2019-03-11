@@ -49,7 +49,10 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from nideshop_topic 
+		select count(*) from nideshop_topic where 1=1
+        <if test="type != null and type != ''">
+          and topic_category_id = ${type}
+        </if>
 	</select>
 
     <insert id="save" parameterType="com.fei.springboot.domain.TopicVo" useGeneratedKeys="true" keyProperty="id">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fei.springboot.dao.ApiHelpIssueMapper">
+<mapper namespace="com.fei.springboot.provider8882.dao.ApiHelpIssueMapper">
 
     <resultMap type="com.fei.springboot.domain.HelpIssueVo" id="helpIssueMap">
         <result property="id" column="id"/>

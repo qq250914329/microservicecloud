@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fei.springboot.provider8883.dao.ApiNodesMapper">
+
+    <resultMap type="com.fei.springboot.domain.NodesVo" id="nodesMap">
+        <result property="id" column="id"/>
+        <result property="userid" column="userid"/>
+        <result property="telephone" column="telephone"/>
+        <result property="title" column="title"/>
+        <result property="subtitle" column="subTitle"/>
+        <result property="date" column="date"/>
+        <result property="foruser" column="forUser"/>
+        <result property="type" column="type"/>
+        <result property="templete" column="templete"/>
+        <result property="titleimage" column="titleImage"/>
+        <result property="isshow" column="isShow"/>
+        <result property="istop" column="isTop"/>
+        <result property="ext1" column="ext1"/>
+        <result property="ext2" column="ext2"/>
+        <result property="ext3" column="ext3"/>
+        <result property="ext4" column="ext4"/>
+        <result property="ext5" column="ext5"/>
+        <result property="ext6" column="ext6"/>
+        <result property="ext7" column="ext7"/>
+        <result property="ext8" column="ext8"/>
+        <result property="ext9" column="ext9"/>
+        <result property="ext10" column="ext10"/>
+        <result property="ext11" column="ext11"/>
+        <result property="ext12" column="ext12"/>
+        <result property="ext13" column="ext13"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fei.springboot.domain.NodesVo">
+		select
+			`id`,
+			`userid`,
+			`telephone`,
+			`title`,
+			`subTitle`,
+			`date`,
+			`forUser`,
+			`type`,
+			`templete`,
+			`titleImage`,
+			`isShow`,
+			`isTop`,
+			`ext1`,
+			`ext2`,
+			`ext3`,
+			`ext4`,
+			`ext5`,
+			`ext6`,
+			`ext7`,
+			`ext8`,
+			`ext9`,
+			`ext10`,
+			`ext11`,
+			`ext12`,
+			`ext13`
+		from nideshop_nodes
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fei.springboot.domain.NodesVo">
+		select
+    		`id`,
+    		`userid`,
+    		`telephone`,
+    		`title`,
+    		`subTitle`,
+    		`date`,
+    		`forUser`,
+    		`type`,
+    		`templete`,
+    		`titleImage`,
+    		`isShow`,
+    		`isTop`,
+    		`ext1`,
+    		`ext2`,
+    		`ext3`,
+    		`ext4`,
+    		`ext5`,
+    		`ext6`,
+    		`ext7`,
+    		`ext8`,
+    		`ext9`,
+    		`ext10`,
+    		`ext11`,
+    		`ext12`,
+    		`ext13`
+		from nideshop_nodes
+		WHERE 1=1
+		<if test="type != null and type != ''">
+			AND type=${type}
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from nideshop_nodes
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fei.springboot.domain.NodesVo">
+		insert into nideshop_nodes(
+			`id`,
+			`userid`,
+			`telephone`,
+			`title`,
+			`subTitle`,
+			`date`,
+			`forUser`,
+			`type`,
+			`templete`,
+			`titleImage`,
+			`isShow`,
+			`isTop`,
+			`ext1`,
+			`ext2`,
+			`ext3`,
+			`ext4`,
+			`ext5`,
+			`ext6`,
+			`ext7`,
+			`ext8`,
+			`ext9`,
+			`ext10`,
+			`ext11`,
+			`ext12`,
+			`ext13`)
+		values(
+			#{id},
+			#{userid},
+			#{telephone},
+			#{title},
+			#{subtitle},
+			#{date},
+			#{foruser},
+			#{type},
+			#{templete},
+			#{titleimage},
+			#{isshow},
+			#{istop},
+			#{ext1},
+			#{ext2},
+			#{ext3},
+			#{ext4},
+			#{ext5},
+			#{ext6},
+			#{ext7},
+			#{ext8},
+			#{ext9},
+			#{ext10},
+			#{ext11},
+			#{ext12},
+			#{ext13})
+	</insert>
+	 
+	<update id="update" parameterType="com.fei.springboot.domain.NodesVo">
+		update nideshop_nodes 
+		<set>
+			<if test="userid != null">`userid` = #{userid}, </if>
+			<if test="telephone != null">`telephone` = #{telephone}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="subtitle != null">`subTitle` = #{subtitle}, </if>
+			<if test="date != null">`date` = #{date}, </if>
+			<if test="foruser != null">`forUser` = #{foruser}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="templete != null">`templete` = #{templete}, </if>
+			<if test="titleimage != null">`titleImage` = #{titleimage}, </if>
+			<if test="isshow != null">`isShow` = #{isshow}, </if>
+			<if test="istop != null">`isTop` = #{istop}, </if>
+			<if test="ext1 != null">`ext1` = #{ext1}, </if>
+			<if test="ext2 != null">`ext2` = #{ext2}, </if>
+			<if test="ext3 != null">`ext3` = #{ext3}, </if>
+			<if test="ext4 != null">`ext4` = #{ext4}, </if>
+			<if test="ext5 != null">`ext5` = #{ext5}, </if>
+			<if test="ext6 != null">`ext6` = #{ext6}, </if>
+			<if test="ext7 != null">`ext7` = #{ext7}, </if>
+			<if test="ext8 != null">`ext8` = #{ext8}, </if>
+			<if test="ext9 != null">`ext9` = #{ext9}, </if>
+			<if test="ext10 != null">`ext10` = #{ext10}, </if>
+			<if test="ext11 != null">`ext11` = #{ext11}, </if>
+			<if test="ext12 != null">`ext12` = #{ext12}, </if>
+			<if test="ext13 != null">`ext13` = #{ext13}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from nideshop_nodes where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from nideshop_nodes where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

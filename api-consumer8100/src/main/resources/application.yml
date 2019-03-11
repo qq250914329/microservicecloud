@@ -1,6 +1,8 @@
 server:
   port: 8100
-
+  ssl:
+    key-store: 1898606_visiter.pfx
+    key-store-password: 1mkKKi40
 eureka:
   client:
     register-with-eureka: false

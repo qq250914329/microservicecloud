@@ -67,6 +67,7 @@ public class ApiIndexController extends ApiBaseAction {
         param = new HashMap<String, Object>();
         param.put("sidx", "sort_order ");
         param.put("order", "asc ");
+        param.put("type", 0);
         List<ChannelVo> channel = this.channelService.queryList(param);
         resultObj.put("channel", channel);
         //
@@ -195,6 +196,7 @@ public class ApiIndexController extends ApiBaseAction {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("offset", 0);
         param.put("limit", 5);
+        param.put("type",1);
         List<TopicVo> topicList = this.topicService.queryList(param);
         resultObj.put("topicList", topicList);
         //
@@ -289,6 +291,7 @@ public class ApiIndexController extends ApiBaseAction {
         param = new HashMap<String, Object>();
         param.put("sidx", "sort_order ");
         param.put("order", "asc ");
+        param.put("type", 1);
         List<ChannelVo> channel = this.channelService.queryList(param);
         resultObj.put("channel", channel);
         //
