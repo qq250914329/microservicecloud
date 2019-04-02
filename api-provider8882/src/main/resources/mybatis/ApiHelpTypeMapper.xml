@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fei.springboot.provider8882.dao.ApiHelpTypeMapper">
+<mapper namespace="com.fei.springcloud.provider8882.dao.ApiHelpTypeMapper">
 
-    <resultMap type="com.fei.springboot.domain.HelpTypeVo" id="helpTypeMap">
+    <resultMap type="com.fei.springcloud.domain.HelpTypeVo" id="helpTypeMap">
         <result property="id" column="id"/>
         <result property="typeName" column="type_name"/>
         <result property="sort" column="sort"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.fei.springboot.domain.HelpTypeVo">
+    <select id="queryObject" resultType="com.fei.springcloud.domain.HelpTypeVo">
 		select
 			`id`,
 			`type_name`,
@@ -18,7 +18,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.fei.springboot.domain.HelpTypeVo">
+    <select id="queryList" resultType="com.fei.springcloud.domain.HelpTypeVo">
         select
         `id`,
         `type_name`,

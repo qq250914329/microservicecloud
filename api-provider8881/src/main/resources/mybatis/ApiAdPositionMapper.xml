@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fei.springboot.provider8882.dao.ApiAdPositionMapper">
+<mapper namespace="com.fei.springcloud.provider8882.dao.ApiAdPositionMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.fei.springboot.domain.AdPositionVo" id="adPositionMap">
+    <resultMap type="com.fei.springcloud.domain.AdPositionVo" id="adPositionMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="width" column="width"/>
@@ -12,11 +12,11 @@
         <result property="desc" column="desc"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.fei.springboot.domain.AdPositionVo">
+    <select id="queryObject" resultType="com.fei.springcloud.domain.AdPositionVo">
 		select * from nideshop_ad_position where id = #{value}
 	</select>
 
-    <select id="queryList" resultType="com.fei.springboot.domain.AdPositionVo">
+    <select id="queryList" resultType="com.fei.springcloud.domain.AdPositionVo">
         select * from nideshop_ad_position
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -35,7 +35,7 @@
 		select count(*) from nideshop_ad_position 
 	</select>
 
-    <insert id="save" parameterType="com.fei.springboot.domain.AdPositionVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.fei.springcloud.domain.AdPositionVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_ad_position
 		(
 			`name`, 
@@ -52,7 +52,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.fei.springboot.domain.AdPositionVo">
+    <update id="update" parameterType="com.fei.springcloud.domain.AdPositionVo">
         update nideshop_ad_position
         <set>
             <if test="name != null">`name` = #{name},</if>

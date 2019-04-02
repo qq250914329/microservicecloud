@@ -1,14 +1,14 @@
-package com.fei.springboot.controller;
+package com.fei.springcloud.controller;
 
-import com.fei.springboot.annotation.IgnoreAuth;
-import com.fei.springboot.annotation.LoginUser;
-import com.fei.springboot.domain.KeywordsVo;
-import com.fei.springboot.domain.SearchHistoryVo;
-import com.fei.springboot.domain.UserVo;
-import com.fei.springboot.service.ApiKeywordsService;
-import com.fei.springboot.service.ApiSearchHistoryService;
-import com.fei.springboot.util.ApiBaseAction;
-import com.fei.springboot.util.Query;
+import com.fei.springcloud.annotation.IgnoreAuth;
+import com.fei.springcloud.annotation.LoginUser;
+import com.fei.springcloud.domain.KeywordsVo;
+import com.fei.springcloud.domain.SearchHistoryVo;
+import com.fei.springcloud.domain.UserVo;
+import com.fei.springcloud.service.ApiKeywordsService;
+import com.fei.springcloud.service.ApiSearchHistoryService;
+import com.fei.springcloud.util.ApiBaseAction;
+import com.fei.springcloud.util.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
